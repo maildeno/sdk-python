@@ -14,12 +14,14 @@ from ._async_client import AsyncMaildenoClient
 from ._client import MaildenoClient
 from ._error import MaildenoError
 from ._types import (
+    CacheConfig,
     ContextValue,
     DynamicData,
     MergeTagGroup,
     RenderResult,
     RenderTarget,
     SdkErrorCode,
+    TemplateJson,
     ValidationIssue,
 )
 
@@ -30,6 +32,7 @@ except PackageNotFoundError:
 
 __all__ = [
     "AsyncMaildenoClient",
+    "CacheConfig",
     "ContextValue",
     "DynamicData",
     "MaildenoClient",
@@ -38,6 +41,7 @@ __all__ = [
     "RenderResult",
     "RenderTarget",
     "SdkErrorCode",
+    "TemplateJson",
     "ValidationIssue",
     "__version__",
 ]

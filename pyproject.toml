@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "maildeno"
-version = "1.0.0"
+version = "2.0.0"
 description = "Official Python SDK for the Maildeno render API"
 readme = "README.md"
 license = { text = "MIT" }
@@ -26,6 +26,7 @@ classifiers = [
 ]
 dependencies = [
     "httpx>=0.28.1,<1.0",
+    "wasmtime>=45.0.0",
     "typing-extensions>=4.15.0; python_version<'3.11'",
 ]
 
@@ -46,6 +47,9 @@ Issues = "https://github.com/maildeno/sdk-python/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["maildeno"]
+
+# Ensure engine.wasm is included in the wheel alongside the Python files
+[tool.hatch.build.targets.wheel.shared-data]
 
 [tool.hatch.build.targets.sdist]
 include = ["/maildeno", "/tests", "/README.md", "/LICENSE", "/CHANGELOG.md"]
@@ -74,11 +78,11 @@ target-version = "py39"
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "N", "SIM", "RUF"]
 ignore = [
-    "E501",   # handled by formatter
-    "UP006",  # `Dict` -> `dict`  (we target 3.9; future annotations only goes so far)
-    "UP007",  # `Optional[X]` -> `X | None`
-    "UP035",  # `typing.Type` is deprecated  — same reason
-    "UP045",  # Use `X | None` for type annotations
+    "E501",
+    "UP006",
+    "UP007",
+    "UP035",
+    "UP045",
 ]
 
 [tool.ruff.lint.isort]

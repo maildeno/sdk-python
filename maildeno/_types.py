@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import sys
-from dataclasses import dataclass
-from typing import Any, Dict, List, Union
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Union
 
 if sys.version_info >= (3, 11):
     from typing import Literal, NotRequired, TypedDict
@@ -18,15 +18,6 @@ RenderTarget = Literal["html", "react-email", "mjml"]
 
 
 # ── Dynamic data — all fields optional ────────────────────────────────────────
-#
-# Pass only what you need. Everything defaults to {}.
-#
-# Examples:
-#   {}                                            no merge tags, no context
-#   {"merge_tags": {"text": {"name": "Noruwa"}}}
-#   {"context": {"plan": "pro"}}
-#   {"merge_tags": {"text": {...}, "url": {...}}, "context": {"country": "usa"}}
-
 
 class MergeTagGroup(TypedDict, total=False):
     """Merge tag values, split by escaping rule."""
@@ -52,8 +43,52 @@ class DynamicData(TypedDict, total=False):
     context: Dict[str, ContextValue]
 
 
-# ── Render result ─────────────────────────────────────────────────────────────
+# ── Template JSON returned by GET /v1/sdk/template/{id} ──────────────────────
 
+class TemplateJson(TypedDict, total=False):
+    """Shape of the raw template payload returned by the Maildeno API."""
+
+    template_id: str
+    template_name: str
+    canvas: Dict[str, Any]
+    rows: List[Any]
+    schema_version: str
+
+
+# ── Cache configuration ───────────────────────────────────────────────────────
+
+class CacheConfig(TypedDict, total=False):
+    """Cache strategy configuration.
+
+    Example — memory with custom TTL::
+
+        cache={"ttl": 60_000}
+
+    Example — persistent disk cache::
+
+        cache={"type": "disk", "path": "/var/cache/maildeno", "ttl": 300_000}
+    """
+
+    #: Storage strategy. ``"memory"`` (default) or ``"disk"``.
+    type: Literal["memory", "disk"]
+
+    #: Directory used when ``type="disk"``.
+    #: Absolute or relative to ``os.getcwd()``. Created automatically on first write.
+    #: Default: ``".maildeno-cache"``.
+    path: str
+
+    #: How long a cached template is considered fresh (milliseconds).
+    #: After this period a re-fetch is attempted; stale copy used if server unreachable.
+    #: Default: ``300_000`` (5 minutes).
+    ttl: int
+
+    #: Maximum number of template entries to hold.
+    #: Oldest entry evicted when the limit is reached.
+    #: Default: ``50``.
+    max_entries: int
+
+
+# ── Render result ─────────────────────────────────────────────────────────────
 
 @dataclass(frozen=True)
 class RenderResult:
@@ -63,25 +98,15 @@ class RenderResult:
     target: RenderTarget
     #: The rendered output string (HTML, TSX, or MJML).
     output: str
+    #: True when rendered from a stale cache entry because the server was
+    #: unreachable. The output is still valid — use this flag to log/alert.
+    from_stale_cache: bool = field(default=False)
 
 
 # ── Validation issues (422 from FastAPI / pydantic) ──────────────────────────
 
-
 class ValidationIssue(TypedDict, total=False):
-    """A single pydantic validation error.
-
-    Returned by FastAPI inside the ``detail`` array of a 422 response.
-
-    Example::
-
-        {
-            "type": "uuid_parsing",
-            "loc":  ["body", "template_id"],
-            "msg":  "Input should be a valid UUID, ...",
-            "input": "not-a-uuid",
-        }
-    """
+    """A single pydantic validation error."""
 
     type: str
     loc: List[Any]
@@ -92,27 +117,28 @@ class ValidationIssue(TypedDict, total=False):
 # ── Error codes ───────────────────────────────────────────────────────────────
 
 SdkErrorCode = Literal[
-    "INVALID_API_KEY",     # 401  bad or missing key
-    "FORBIDDEN",           # 403  key lacks scope for the requested target
-    "TEMPLATE_NOT_FOUND",  # 404  template_id not in DB
-    "RENDER_ERROR",        # 422  builder / validation failed
-    "NETWORK_ERROR",       # transport / DNS / connection failure
-    "TIMEOUT",             # request exceeded timeout
+    "INVALID_API_KEY",
+    "FORBIDDEN",
+    "TEMPLATE_NOT_FOUND",
+    "RENDER_ERROR",
+    "NETWORK_ERROR",
+    "TIMEOUT",
     "UNKNOWN",
 ]
 
 
-# ── Re-exports kept tidy ──────────────────────────────────────────────────────
+# ── Re-exports ────────────────────────────────────────────────────────────────
 
 __all__ = [
+    "CacheConfig",
     "ContextValue",
     "DynamicData",
     "MergeTagGroup",
     "RenderResult",
     "RenderTarget",
     "SdkErrorCode",
+    "TemplateJson",
     "ValidationIssue",
 ]
 
-# Help static checkers that don't see the conditional import above.
-_ = NotRequired
+_ = NotRequired  # help static checkers that don't see the conditional import

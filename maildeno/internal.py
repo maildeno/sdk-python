@@ -10,7 +10,7 @@ import httpx
 from ._error import MaildenoError
 from ._types import DynamicData, RenderTarget, TemplateJson
 
-DEFAULT_BASE_URL  = "https://api.maildeno.com"
+DEFAULT_BASE_URL  = "http://localhost:9000"  # "https://api.maildeno.com"
 DEFAULT_TIMEOUT   = 30.0
 TEMPLATE_PATH     = "/v1/sdk/template"
 
