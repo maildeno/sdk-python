@@ -1,7 +1,5 @@
 """Output minification for rendered templates.
 
-Mirrors the JavaScript SDK's ``minifyOutput()`` function exactly:
-
 - **HTML** — collapses inter-tag whitespace without touching CSS inside
   ``<style>`` blocks.
 - **MJML** — same whitespace collapse, preserving ``<mj-style>`` blocks.
@@ -32,7 +30,7 @@ def minify_output(target: str, source: str) -> str:
         return _minify_html(source, style_tag="mj-style")
     if target == "react-email":
         return _minify_react(source)
-    # Unknown target — return unchanged (matches JS behaviour)
+    # Unknown target — return unchanged 
     return source
 
 

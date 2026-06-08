@@ -471,8 +471,8 @@ dynamic_data = {
         # Text values — inserted as plain text
         "text": {
             "first_name":    "Noruwa",
-            "last_name":     "Lovelace",
-            "company_name":  "Anthropic",
+            "last_name":     "Obaseki",
+            "company_name":  "Maildeno",
             "plan_name":     "Pro",
         },
 
@@ -485,7 +485,7 @@ dynamic_data = {
 
         # Attribute values — used in HTML attributes (alt, title, etc.)
         "attr": {
-            "logo_alt":      "Example Inc.",
+            "logo_alt":      "Maildeno Inc.",
             "banner_title":  "Summer Sale",
         },
     },

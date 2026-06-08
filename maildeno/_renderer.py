@@ -9,6 +9,9 @@ Memory contract with the Rust engine
       Read ``len`` bytes of UTF-8 JSON from linear memory at ``ptr``,
       process, write a null-terminated UTF-8 JSON result elsewhere,
       return its pointer.
+  heap_peak() -> i32
+      Return peak heap bytes used since the last render() call started.
+      Safe to call after every render(). Used for high-watermark monitoring.
 
 Input JSON shape (→ Rust)::
 
@@ -34,11 +37,19 @@ from __future__ import annotations
 
 import importlib.resources
 import json
+import logging
 import threading
 from typing import Any, Dict, Optional
 
 from ._error import MaildenoError
 from ._types import DynamicData, RenderTarget, TemplateJson
+
+logger = logging.getLogger(__name__)
+
+# Warn when heap usage exceeds this fraction of the 12 MB ceiling.
+# 9 MB = 75 % of 12 MB. 
+# Heap size for template rendering are normally less than 2 MB. Headroom over worst case - 5.5×
+_HEAP_WARN_BYTES = 9 * 1024 * 1024
 
 # ── Wasm singleton ────────────────────────────────────────────────────────────
 
@@ -129,6 +140,13 @@ def render_template(
     def render_fn(ptr: int, n: int) -> int:
         return exports["render"](store, ptr, n)  # type: ignore[no-any-return]
 
+    def heap_peak_fn() -> Optional[int]:
+        """Call heap_peak() export if present; return None if not exported."""
+        try:
+            return exports["heap_peak"](store)  # type: ignore[no-any-return]
+        except (KeyError, Exception):
+            return None
+
     def read_mem(ptr: int, length: int) -> bytes:
         return bytes(memory.read(store, ptr, ptr + length))
 
@@ -162,6 +180,16 @@ def render_template(
 
     result_ptr = render_fn(input_ptr, input_len)
     dealloc_fn(input_ptr, input_len)
+
+    # ── Heap peak monitoring ──────────────────────────────────────────────────
+    peak = heap_peak_fn()
+    if peak is not None and peak > _HEAP_WARN_BYTES:
+        logger.warning(
+            "[maildeno-engine] heap usage high: %.2f MB  target=%s",
+            peak / 1024 / 1024,
+            target,
+        )
+    # ─────────────────────────────────────────────────────────────────────────
 
     result_json = read_cstr(result_ptr)
     dealloc_str_fn(result_ptr)
