@@ -8,7 +8,7 @@ from typing import Any, Dict, Optional
 import httpx
 
 from ._error import MaildenoError
-from ._types import DynamicData, RenderTarget, TemplateJson
+from ._types import DynamicData, TemplateJson
 
 DEFAULT_BASE_URL  = "https://api.maildeno.com"
 DEFAULT_TIMEOUT   = 30.0

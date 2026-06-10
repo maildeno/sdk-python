@@ -10,7 +10,7 @@ from typing import List, Optional, Type
 
 import httpx
 
-from ._cache import TemplateCache, build_cache
+from ._cache import build_cache
 from ._minify import minify_output
 from ._error import MaildenoError
 from ._internal import (

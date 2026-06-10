@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import warnings
 from types import TracebackType
-from typing import Any, Dict, List, Optional, Type
+from typing import List, Optional, Type
 
 import httpx
 
-from ._cache import TemplateCache, build_cache
+from ._cache import build_cache
 from ._minify import minify_output
 from ._error import MaildenoError
 from ._internal import (
