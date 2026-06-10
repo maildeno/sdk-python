@@ -43,12 +43,13 @@ dev = [
 [project.urls]
 Homepage = "https://maildeno.com"
 Documentation = "https://docs.maildeno.com"
+Repository = "https://github.com/maildeno/sdk-python"
 Issues = "https://github.com/maildeno/sdk-python/issues"
+Changelog = "https://github.com/maildeno/sdk-python/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["maildeno"]
 
-# Ensure engine.wasm is included in the wheel alongside the Python files
 [tool.hatch.build.targets.wheel.shared-data]
 
 [tool.hatch.build.targets.sdist]
