@@ -5,6 +5,23 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.0.1] - 2026-06-12
+
+### Fixed
+
+- **Visibility context now handles non-string values.** Context passed as a
+  number or boolean (e.g. `context: { premium: true }`, `context: { tier: 2 }`)
+  was read as empty, so visibility rules comparing against it never matched and
+  the affected rows/columns were always hidden. Numbers and booleans are now
+  coerced for comparison (`2` matches `"2"`, `true` matches `"true"`). String
+  context values were unaffected and continue to work.
+
+- **Visibility context keys are now matched case-insensitively.** The rule tag
+  was lowercased before lookup while the context key was matched exactly, so
+  camelCase or capitalized keys (e.g. `orderCount`, `Premium`) never resolved.
+  Keys now match regardless of case. Note that the rule's `tag` must still
+  match the context key *name* — `isPremium` and `premium` remain distinct.
+
 ## [2.0.0] - 2026-06-07
 
 ### Changed — breaking
