@@ -5,6 +5,20 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.0.2] - 2026-06-21
+
+### Fixed
+
+- **Menu component spacing corrected for mobile screens.** Left, right, and
+  bottom margins were misaligned on small viewports. Margins are now consistent
+  across breakpoints.
+
+- **Preheader spacer sequence added for HTML and MJML templates.** Preheader
+  text lacked the invisible-character padding sequence needed to prevent email
+  clients from pulling in unwanted body text as preview copy. The standard
+  spacer string (`&#847; &zwnj; &nbsp;` × 7) is now included after the
+  preheader content in both plain HTML and MJML output.
+
 ## [2.0.1] - 2026-06-12
 
 ### Fixed
