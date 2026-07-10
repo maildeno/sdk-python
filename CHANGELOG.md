@@ -5,6 +5,21 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.0.3] - 2026-07-10
+
+### Changed
+
+- **Updated the embedded WebAssembly rendering engine.** The SDK now ships with
+  the latest `engine.wasm`, incorporating rendering improvements and internal
+  engine refinements while maintaining API compatibility.
+
+### Internal
+
+- **Aligned the SDK with the unified Maildeno rendering engine build system.**
+  The rendering engine is now produced from the same cross-platform build
+  pipeline used across Maildeno SDKs, ensuring consistent rendering behaviour
+  between WebAssembly and native runtimes.
+
 ## [2.0.2] - 2026-06-21
 
 ### Fixed
