@@ -5,6 +5,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.0.4] - 2026-07-13
+
+### Fixed
+
+- **Resolved missing border radius on the outer MJML table row.** The outer `<td>` wrapper now correctly preserves border radius during MJML rendering, ensuring consistent rounded corners in the rendered email output.
+
 ## [2.0.3] - 2026-07-10
 
 ### Changed
