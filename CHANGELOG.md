@@ -5,6 +5,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.0.5] - 2026-08-02
+
+### Fixed
+
+* **Resolved component overflow escaping parent containers.** Parent `<td>` and `<table>` elements now apply `overflow: hidden` where appropriate, ensuring child components correctly respect border radius and remain clipped within their containers across rendered email output.
+
 ## [2.0.4] - 2026-07-13
 
 ### Fixed
