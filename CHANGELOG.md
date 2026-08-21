@@ -5,6 +5,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.0.6] - 2026-08-21
+
+### Fixed
+
+* **Menu and socials components – mobile padding override now properly applied.** The override logic was not being triggered on mobile breakpoints, causing custom padding values to be dropped. This has been corrected, ensuring the specified padding is consistently respected across all screen sizes for both menu and socials blocks.
+
 ## [2.0.5] - 2026-08-02
 
 ### Fixed
