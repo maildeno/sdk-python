@@ -5,6 +5,11 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+##  [2.0.7] - 2026-09-20
+
+### Fixed
+* **Button and Anchor components – padding is now applied to the clickable link element.** Moved padding from the container <div> to the <a> / <Link> element across the HTML, MJML, and React Email renderers. Generated styles now target the .{uid}-link selector for Button and Anchor padding.
+
 ## [2.0.6] - 2026-08-21
 
 ### Fixed
