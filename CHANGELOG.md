@@ -5,6 +5,19 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.1.0] - 2026-11-01
+
+### Added
+* **Mobile property overrides for Row, Column, and Row Spacer components.** Added support for rendering the editor's sparse `mobile` configuration in HTML, MJML, and React Email, ensuring mobile-specific styles are applied instead of falling back to desktop values.
+  * **Row:** `backgroundColor`, `backgroundGradient`, `padding`, `border`, `minHeight`, `gap`.
+  * **Column:** `backgroundColor`, `backgroundGradient`, `padding`, `border`, `verticalAlign`.
+  * **Row Spacer:** `height`, `backgroundColor`, `backgroundGradient`.
+  * Nodes with at least one non-null mobile property receive the required hook classes (`eb-<id>`, `eb-<id>-box`, `eb-<id>-outer`, `eb-<rowId>-gap`) for targeting mobile overrides.
+  * Mobile override rules are generated inside the `/* Mobile property overrides */` block, before component rules, preserving the order in which properties are written by the editor.
+  * Nodes without mobile overrides, or with IDs containing characters outside letters, digits, hyphens, and underscores, do not receive mobile hook classes or override rules.
+  * **HTML:** Rows with mobile border overrides now receive an outer wrapper even when the desktop border has no radius, ensuring the mobile border has an element to target.
+  * Hidden rows, columns, and row spacers, as well as row spacers with a height of `0`, are excluded from mobile override generation.
+
 ##  [2.0.7] - 2026-09-20
 
 ### Fixed
