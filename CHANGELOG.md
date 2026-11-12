@@ -5,6 +5,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.1.3] - 2026-11-12
+
+### Fixed
+
+Removed an unnecessary 2px border hack on table cells. The <td> border carried an extra 2px that was no longer needed. With the hack gone, the border no longer clips past the corners.
+
 ## [2.1.2] - 2026-11-11
 
 ### Fixed
