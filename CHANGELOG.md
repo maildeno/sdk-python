@@ -5,6 +5,22 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.2.1] - 2026-11-15
+
+### Fixed
+
+- **A font set on part of a text is now requested correctly.** The editor writes such a font into the content of a paragraph, heading or list as `<span style="font-family: &quot;Open Sans&quot;;">`. The engine took the `;` of `&quot;` for the end of the declaration and read the family as `&quot`, so the real font was never requested, and the Google Fonts link of every export carried an entry that is not a font: an empty `family=` and a stray `&quot:wght@400;500;600;700`. Open Sans, Roboto, Lora and every other font chosen for a selection were missing from the link, in HTML, MJML and React Email.
+  `extract_font_families_from_html` now:
+  - decodes `&quot;`, `&#39;` and `&apos;` before it reads, and reads a name as the editor's `extractFontFamiliesFromHtml` does;
+  - reads `style='font-family: "Open Sans"'`;
+  - ends a bare name at `!important`;
+  - requires the colon, so the words "font-family" in a text are not taken for a declaration;
+  - finds the property without lower-casing the text, which previously put the position in the wrong place, and could panic, when a capital letter is longer in lower case (`İ`).
+- **React Email keeps the quotes a font name needs.** A name with a word that starts with a digit (`Exo 2`, `Source Sans 3`, `Source Serif 4`) is not valid CSS without quotes, and the browser drops the whole declaration. React Email took the quotes off every name, so `fontFamily: "Exo 2, Arial, sans-serif"` never applied. It is now `"'Exo 2', Arial, sans-serif"`, as the editor writes it, for the font of a block and for a font set inside the text. HTML and MJML always quoted the name.
+- **Removed an unnecessary 2px border hack** on the mobile override for table cells.
+
+The only output that changes is the Google Fonts link (the entry that was not a font goes, the missing families come in) and, in React Email, the font-family of a block or span whose font has a digit in its name.
+
 ## [2.2.0] - 2026-11-14
 
 ### Added
