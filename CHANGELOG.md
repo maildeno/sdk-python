@@ -5,6 +5,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.2.2] - 2026-11-16
+
+### Added
+
+**A corner radius per corner**. The radius of a row, a column, an image, a video and a button is a number, as it always was, or an object with a number for each corner: `{ "topLeft": 8, "topRight": 8, "bottomRight": 0, "bottomLeft": 0 }`.
+
 ## [2.2.1] - 2026-11-15
 
 ### Fixed
